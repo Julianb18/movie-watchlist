@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { ResultCard } from "./ResultCard";
 
 export const Add = () => {
+  // storing what is typed in the input field
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  // storing all the found results from the api
+  const [searchResults, setSearchResults] = useState([]);
 
   const onChange = (e) => {
     e.preventDefault();
@@ -13,13 +15,13 @@ export const Add = () => {
     fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1&include_adult=false&query=${e.target.value}`
     )
-      .then((res) => res.json())
+      .then((response) => response.json())
       .then((data) => {
         if (!data.errors) {
           // data.results is from the console results given back from the api request
-          setResults(data.results);
+          setSearchResults(data.results);
         } else {
-          setResults([]);
+          setSearchResults([]);
         }
       });
   };
@@ -37,9 +39,9 @@ export const Add = () => {
             />
           </div>
 
-          {results.length > 0 && (
+          {searchResults.length > 0 && (
             <ul className="results">
-              {results.map((movie) => (
+              {searchResults.map((movie) => (
                 <li key={movie.id}>
                   <ResultCard movie={movie} />
                 </li>

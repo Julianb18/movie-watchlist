@@ -1,11 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap");
 
 :root {
-  --primary: #032541;
+  --primary: #021a2e;
   --secondary: #d0b621;
   --primary-bg: rgb(26, 48, 61);
   --white: #fff;
-  --remove: #d02121;
+  --remove: #bd4040;
 }
 
 body {
@@ -251,7 +251,7 @@ header .nav-links li:last-child {
 }
 
 .movie-card:hover .overlay {
-  border: 3px solid var(--secondary);
+  border: 2px solid var(--secondary);
 }
 
 .movie-card .inner-card-controls {
@@ -285,6 +285,10 @@ header .nav-links li:last-child {
 .ctrl-btn:hover {
   color: var(--secondary);
   cursor: pointer;
+}
+
+.btn-remove:hover {
+  color: var(--remove);
 }
 
 .movie-page .no-movies {

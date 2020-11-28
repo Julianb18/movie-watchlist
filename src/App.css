@@ -2,14 +2,17 @@
 
 :root {
   --primary: #032541;
-  --secondary: #21d07a;
+  --secondary: #d0b621;
+  --primary-bg: rgb(26, 48, 61);
   --white: #fff;
+  --remove: #d02121;
 }
 
 body {
   font-family: "Source Sans Pro", sans-serif;
   padding: 0;
   margin: 0;
+  background-color: var(--primary-bg);
 }
 
 .container {
@@ -58,7 +61,7 @@ body {
 }
 
 .btn:hover {
-  background-color: #1aa762;
+  background-color: #a7991a;
   opacity: 1;
   cursor: pointer;
 }
@@ -207,7 +210,7 @@ header .nav-links li:last-child {
 }
 
 .movie-page .heading {
-  color: var(--primary);
+  color: var(--white);
   margin: 0;
 }
 

@@ -8,6 +8,10 @@
   flex-direction: column;
 }
 
+.media-card.tracked {
+  filter: saturate(0.84) brightness(0.64);
+}
+
 .media-card img,
 .media-card-fallback {
   width: 100%;
@@ -60,6 +64,15 @@
   display: grid;
   gap: 6px;
   margin-top: auto;
+}
+
+.media-card-state {
+  margin: 0;
+  color: #c4b5fd;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .media-card-actions .btn {

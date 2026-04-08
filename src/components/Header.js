@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Header.css";
 
-export const Header = () => {
+export const Header = ({ onOpenAuth }) => {
   const { user, signOut } = useAuth();
 
   return (
@@ -29,9 +29,9 @@ export const Header = () => {
                   Sign Out
                 </button>
               ) : (
-                <Link to="/auth" className="btn">
+                <button className="btn" type="button" onClick={onOpenAuth}>
                   Sign In
-                </Link>
+                </button>
               )}
             </li>
           </ul>

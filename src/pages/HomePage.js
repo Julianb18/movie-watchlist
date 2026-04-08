@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { GlobalContext } from "../context/GlobalState";
+import { MediaCard } from "../components/MediaCard";
 import "../styles/HomePage.css";
 
 const normalizeMedia = (item) => ({
@@ -9,40 +10,6 @@ const normalizeMedia = (item) => ({
   release_date: item.release_date || item.first_air_date || "",
   media_key: `${item.media_type || "movie"}-${item.id}`,
 });
-
-const RailCard = ({ item, onAddWatchlist, onAddWatched, watchlist, watched }) => {
-  const mediaKey = `${item.media_type || "movie"}-${item.id}`;
-  const inWatchlist = watchlist.some((entry) => entry.media_key === mediaKey);
-  const inWatched = watched.some((entry) => entry.media_key === mediaKey);
-  const year = item.release_date ? item.release_date.substring(0, 4) : "-";
-
-  return (
-    <article className="rail-card">
-      {item.poster_path ? (
-        <img
-          src={`http://image.tmdb.org/t/p/w300${item.poster_path}`}
-          alt={`${item.title} poster`}
-        />
-      ) : (
-        <div className="rail-card-fallback">No image</div>
-      )}
-      <div className="rail-card-content">
-        <h3>{item.title}</h3>
-        <p>
-          {year} · {item.media_type === "tv" ? "Series" : "Movie"}
-        </p>
-        <div className="rail-card-actions">
-          <button className="btn" disabled={inWatchlist || inWatched} onClick={() => onAddWatchlist(item)}>
-            Watchlist
-          </button>
-          <button className="btn" disabled={inWatched} onClick={() => onAddWatched(item)}>
-            Watched
-          </button>
-        </div>
-      </div>
-    </article>
-  );
-};
 
 const HomeRail = ({ title, items, onAddWatchlist, onAddWatched, watchlist, watched }) => {
   const railRef = useRef(null);
@@ -75,7 +42,7 @@ const HomeRail = ({ title, items, onAddWatchlist, onAddWatched, watchlist, watch
     const rail = railRef.current;
     if (!rail) return;
 
-    const firstCard = rail.querySelector(".rail-card");
+    const firstCard = rail.querySelector(".media-card");
     if (!firstCard) return;
 
     const cardWidth = firstCard.getBoundingClientRect().width;
@@ -109,9 +76,10 @@ const HomeRail = ({ title, items, onAddWatchlist, onAddWatched, watchlist, watch
 
         <div className="home-rail" ref={railRef}>
           {items.map((item) => (
-            <RailCard
+            <MediaCard
               key={`${item.media_type}-${item.id}`}
               item={item}
+              mode="discover"
               onAddWatchlist={onAddWatchlist}
               onAddWatched={onAddWatched}
               watchlist={watchlist}

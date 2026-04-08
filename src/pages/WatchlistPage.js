@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../context/GlobalState";
-import { MovieCard } from "./MovieCard";
+import { MovieCard } from "../components/MovieCard";
 import "../styles/ListPage.css";
 
-export const Watchlist = () => {
+export const WatchlistPage = () => {
   const { watchlist } = useContext(GlobalContext);
+
   return (
     <div className="movie-page">
       <div className="container">

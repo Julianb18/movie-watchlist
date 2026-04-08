@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import "../styles/AuthPage.css";
+import "../styles/ListPage.css";
 
 export const AuthPage = () => {
   const { user, isConfigured, signInWithEmail, signUpWithEmail, signInWithGoogle } = useAuth();

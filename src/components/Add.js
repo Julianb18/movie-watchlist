@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ResultCard } from "./ResultCard";
+import "../styles/Add.css";
 
 export const Add = () => {
   // storing what is typed in the input field

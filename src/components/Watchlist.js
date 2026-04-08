@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { MovieCard } from "./MovieCard";
+import "../styles/ListPage.css";
 
 export const Watchlist = () => {
   const { watchlist } = useContext(GlobalContext);

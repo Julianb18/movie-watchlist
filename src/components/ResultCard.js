@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { GlobalContext } from "../context/GlobalState";
+import "../styles/ResultCard.css";
 
 export const ResultCard = ({ movie }) => {
   const {

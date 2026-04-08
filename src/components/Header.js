@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Header.css";
 
 export const Header = () => {
   const { user, signOut } = useAuth();
@@ -14,10 +15,10 @@ export const Header = () => {
           </div>
           <ul className="nav-links">
             <li>
-              <Link to="/">Watch List</Link>
+              <Link to="/">Watch Next</Link>
             </li>
             <li>
-              <Link to="/watched">Watched</Link>
+              <Link to="/watched">Seen</Link>
             </li>
             <li>
               <Link to="/add" className="btn">

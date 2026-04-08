@@ -1,0 +1,28 @@
+.auth-card {
+  max-width: 700px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-form input {
+  width: 100%;
+  background: var(--surface);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--surface-border);
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.auth-status {
+  color: var(--white);
+}

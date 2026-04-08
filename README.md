@@ -1,70 +1,62 @@
-# Getting Started with Create React App
+# Movie Watchlist
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Modernized React app for tracking movies and series. It supports:
 
-## Available Scripts
+- Guest mode with `localStorage` persistence.
+- Optional user accounts with Supabase auth.
+- Cross-device sync for signed-in users.
+- TMDB search for both movies and TV series.
 
-In the project directory, you can run:
+## Tech Stack
 
-### `npm start`
+- React 18
+- Vite
+- React Router
+- Supabase (`@supabase/supabase-js`)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Setup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Install dependencies:
 
-### `npm test`
+```bash
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Configure environment variables in `.env`:
 
-### `npm run build`
+```env
+VITE_TMDB_KEY=your_tmdb_api_key
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Start the app:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npm run dev
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Supabase Table
 
-### `npm run eject`
+Create a table named `user_movies` with at least these columns:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- `user_id` (uuid, not null)
+- `movie_id` (bigint, not null)
+- `media_type` (text, not null)
+- `list_type` (text, not null; values `watchlist` or `watched`)
+- `title` (text, not null)
+- `release_date` (text, nullable)
+- `poster_path` (text, nullable)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Recommended unique constraint for upserts:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- `(user_id, movie_id, media_type)`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Enable row-level security and policies so users can only read/write their own rows.
 
-## Learn More
+## Auth Providers
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Enable these Supabase auth providers:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Email/password
+- Google OAuth

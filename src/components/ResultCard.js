@@ -8,9 +8,10 @@ export const ResultCard = ({ movie }) => {
     watchlist,
     watched,
   } = useContext(GlobalContext);
+  const mediaKey = `${movie.media_type || "movie"}-${movie.id}`;
 
-  let storedMovie = watchlist.find((obj) => obj.id === movie.id);
-  let storedMovieWatched = watched.find((obj) => obj.id === movie.id);
+  const storedMovie = watchlist.find((obj) => obj.media_key === mediaKey);
+  const storedMovieWatched = watched.find((obj) => obj.media_key === mediaKey);
 
   const watchlistDisabled = storedMovie
     ? true
@@ -37,7 +38,6 @@ export const ResultCard = ({ movie }) => {
         <div className="header">
           <h3 className="title">{movie.title}</h3>
           <h4 className="release-date">
-            {/*condition incase no release date*/}
             {movie.release_date ? movie.release_date.substring(0, 4) : "-"}
           </h4>
         </div>

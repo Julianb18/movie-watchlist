@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export const Header = () => {
+  const { user, signOut } = useAuth();
+
   return (
     <header>
       <div className="container">
@@ -20,6 +23,17 @@ export const Header = () => {
               <Link to="/add" className="btn">
                 + Add
               </Link>
+            </li>
+            <li>
+              {user ? (
+                <button className="btn" type="button" onClick={signOut}>
+                  Sign Out
+                </button>
+              ) : (
+                <Link to="/auth" className="btn">
+                  Sign In
+                </Link>
+              )}
             </li>
           </ul>
         </div>

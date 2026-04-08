@@ -120,6 +120,10 @@ header .nav-links li:last-child {
   margin-right: 0;
 }
 
+header .nav-links button.btn {
+  font-size: 0.875rem;
+}
+
 /* Add Page */
 .add-content {
   padding: 50px 0;
@@ -295,4 +299,33 @@ header .nav-links li:last-child {
   color: #c4c4c4;
   font-size: 3rem;
   text-align: center;
+}
+
+.auth-card {
+  max-width: 700px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 12px;
+}
+
+.auth-form input {
+  width: 100%;
+  background-color: var(--primary);
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.auth-status {
+  color: var(--white);
 }

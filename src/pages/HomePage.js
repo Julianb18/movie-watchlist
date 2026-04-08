@@ -106,6 +106,7 @@ export const HomePage = () => {
   const { addMovieToWatchlist, addMovieToWatched, watchlist, watched } = useContext(GlobalContext);
   const [trending, setTrending] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
+  const [isDiscoverLoading, setIsDiscoverLoading] = useState(true);
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [randomHighRated, setRandomHighRated] = useState([]);
@@ -116,7 +117,10 @@ export const HomePage = () => {
   useEffect(() => {
     let isMounted = true;
     const apiKey = import.meta.env.VITE_TMDB_KEY;
-    if (!apiKey) return;
+    if (!apiKey) {
+      setIsDiscoverLoading(false);
+      return;
+    }
 
     const load = async () => {
       try {
@@ -157,6 +161,10 @@ export const HomePage = () => {
           setTrending([]);
           setNewReleases([]);
           setGenres([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsDiscoverLoading(false);
         }
       }
     };
@@ -239,7 +247,9 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {!hasRows ? <p className="home-empty">Add your TMDB key to load dashboard rails.</p> : null}
+        {!isDiscoverLoading && !hasRows ? (
+          <p className="home-empty">Add your TMDB key to load dashboard rails.</p>
+        ) : null}
         {generatorError ? <p className="home-error">{generatorError}</p> : null}
         {randomHighRated.length > 0 ? (
           <HomeRail
@@ -252,23 +262,27 @@ export const HomePage = () => {
           />
         ) : null}
 
-        <HomeRail
-          title="Trending Now"
-          items={trending}
-          onAddWatchlist={addMovieToWatchlist}
-          onAddWatched={addMovieToWatched}
-          watchlist={watchlist}
-          watched={watched}
-        />
+        {!isDiscoverLoading && trending.length > 0 ? (
+          <HomeRail
+            title="Trending Now"
+            items={trending}
+            onAddWatchlist={addMovieToWatchlist}
+            onAddWatched={addMovieToWatched}
+            watchlist={watchlist}
+            watched={watched}
+          />
+        ) : null}
 
-        <HomeRail
-          title="New Releases"
-          items={newReleases}
-          onAddWatchlist={addMovieToWatchlist}
-          onAddWatched={addMovieToWatched}
-          watchlist={watchlist}
-          watched={watched}
-        />
+        {!isDiscoverLoading && newReleases.length > 0 ? (
+          <HomeRail
+            title="New Releases"
+            items={newReleases}
+            onAddWatchlist={addMovieToWatchlist}
+            onAddWatched={addMovieToWatched}
+            watchlist={watchlist}
+            watched={watched}
+          />
+        ) : null}
       </div>
 
       {isFilterModalOpen ? (

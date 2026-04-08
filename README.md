@@ -1,11 +1,16 @@
 # Movie Watchlist
 
-Modernized React app for tracking movies and series. It supports:
+A modern movie and series tracker built with React + Vite.
 
-- Guest mode with `localStorage` persistence.
-- Optional user accounts with Supabase auth.
-- Cross-device sync for signed-in users.
-- TMDB search for both movies and TV series.
+## Features
+
+- Dashboard rails for **Trending Now** and **New Releases**
+- Random high-rated picker with optional **genre filters**
+- Persistent, debounced global search (`500ms`)
+- Watch Next and Seen pages grouped by **Movies** and **Series**
+- Media details modal with overview, runtime, genres, rating, language, and trailer
+- Supabase auth modal (Email/Password + Google)
+- Guest mode with localStorage and optional signed-in cloud sync
 
 ## Tech Stack
 
@@ -13,8 +18,9 @@ Modernized React app for tracking movies and series. It supports:
 - Vite
 - React Router
 - Supabase (`@supabase/supabase-js`)
+- TMDB API
 
-## Setup
+## Getting Started
 
 1. Install dependencies:
 
@@ -22,41 +28,69 @@ Modernized React app for tracking movies and series. It supports:
 npm install
 ```
 
-2. Configure environment variables in `.env`:
+2. Add environment variables in `.env`:
 
 ```env
 VITE_TMDB_KEY=your_tmdb_api_key
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your_supabase_publishable_key
 ```
 
-3. Start the app:
+3. Run locally:
 
 ```bash
 npm run dev
 ```
 
-## Supabase Table
+4. Build for production:
 
-Create a table named `user_movies` with at least these columns:
+```bash
+npm run build
+```
 
-- `user_id` (uuid, not null)
-- `movie_id` (bigint, not null)
-- `media_type` (text, not null)
-- `list_type` (text, not null; values `watchlist` or `watched`)
-- `title` (text, not null)
-- `release_date` (text, nullable)
-- `poster_path` (text, nullable)
+## Scripts
 
-Recommended unique constraint for upserts:
+- `npm run dev` - start development server
+- `npm run build` - create production build
+- `npm run preview` - preview production build
+
+## Supabase Setup
+
+This app currently uses table **`user_watchlist`**.
+
+### Required columns
+
+- `id` bigint identity primary key
+- `user_id` uuid not null references `auth.users(id)` on delete cascade
+- `movie_id` bigint not null
+- `media_type` text not null (`movie` or `tv`)
+- `list_type` text not null (`watchlist` or `watched`)
+- `title` text not null
+- `release_date` text nullable
+- `poster_path` text nullable
+- `created_at` timestamptz default `now()`
+
+### Recommended unique index
 
 - `(user_id, movie_id, media_type)`
 
-Enable row-level security and policies so users can only read/write their own rows.
+### RLS
+
+Enable row level security and add policies so authenticated users can only:
+
+- select their own rows
+- insert their own rows
+- update their own rows
+- delete their own rows
 
 ## Auth Providers
 
-Enable these Supabase auth providers:
+Enable these in Supabase Authentication:
 
 - Email/password
 - Google OAuth
+
+Also configure URL settings:
+
+- Site URL: `http://localhost:5173`
+- Redirect URL: `http://localhost:5173`

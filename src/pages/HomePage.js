@@ -106,9 +106,12 @@ export const HomePage = () => {
   const { addMovieToWatchlist, addMovieToWatched, watchlist, watched } = useContext(GlobalContext);
   const [trending, setTrending] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
   const [randomHighRated, setRandomHighRated] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatorError, setGeneratorError] = useState("");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -117,16 +120,18 @@ export const HomePage = () => {
 
     const load = async () => {
       try {
-        const [trendingResponse, movieReleaseResponse, tvReleaseResponse] = await Promise.all([
+        const [trendingResponse, movieReleaseResponse, tvReleaseResponse, genresResponse] = await Promise.all([
           fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}`),
           fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US&page=1`),
           fetch(`https://api.themoviedb.org/3/tv/on_the_air?api_key=${apiKey}&language=en-US&page=1`),
+          fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`),
         ]);
 
-        const [trendingData, movieReleaseData, tvReleaseData] = await Promise.all([
+        const [trendingData, movieReleaseData, tvReleaseData, genresData] = await Promise.all([
           trendingResponse.json(),
           movieReleaseResponse.json(),
           tvReleaseResponse.json(),
+          genresResponse.json(),
         ]);
 
         if (!isMounted) return;
@@ -146,10 +151,12 @@ export const HomePage = () => {
 
         setTrending(trendingItems);
         setNewReleases(releaseItems);
+        setGenres((genresData.genres || []).slice(0, 12));
       } catch (_error) {
         if (isMounted) {
           setTrending([]);
           setNewReleases([]);
+          setGenres([]);
         }
       }
     };
@@ -163,6 +170,12 @@ export const HomePage = () => {
 
   const hasRows = useMemo(() => trending.length > 0 || newReleases.length > 0, [trending, newReleases]);
 
+  const toggleGenre = (genreId) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genreId) ? prev.filter((id) => id !== genreId) : [...prev, genreId]
+    );
+  };
+
   const generateRandomHighRated = async () => {
     const apiKey = import.meta.env.VITE_TMDB_KEY;
     if (!apiKey) {
@@ -175,10 +188,11 @@ export const HomePage = () => {
 
     try {
       const randomPages = Array.from({ length: 3 }, () => Math.floor(Math.random() * 15) + 1);
+      const genreQuery = selectedGenres.join("|");
       const responses = await Promise.all(
         randomPages.map((page) =>
           fetch(
-            `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=${page}`
+            `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&page=${page}&sort_by=vote_average.desc&vote_count.gte=500${genreQuery ? `&with_genres=${encodeURIComponent(genreQuery)}` : ""}`
           )
         )
       );
@@ -192,6 +206,7 @@ export const HomePage = () => {
       const unique = Array.from(new Map(allCandidates.map((item) => [item.id, item])).values());
       const shuffled = unique.sort(() => Math.random() - 0.5);
       setRandomHighRated(shuffled.slice(0, 12));
+      setIsFilterModalOpen(false);
     } catch (_error) {
       setGeneratorError("Could not generate recommendations right now.");
       setRandomHighRated([]);
@@ -206,8 +221,18 @@ export const HomePage = () => {
         <div className="header">
           <h1 className="heading">Dashboard</h1>
           <div className="home-actions">
-            <button className="btn" type="button" onClick={generateRandomHighRated} disabled={isGenerating}>
-              {isGenerating ? "Generating..." : "Can't Decide? Pick for me"}
+            <button className="btn" type="button" onClick={() => setIsFilterModalOpen(true)}>
+              Can't Decide? Pick for me
+            </button>
+            <button
+              className="home-refresh-btn"
+              type="button"
+              onClick={generateRandomHighRated}
+              disabled={isGenerating}
+              title="Generate a new list with current filters"
+              aria-label="Generate a new random list with current filters"
+            >
+              ↻
             </button>
           </div>
         </div>
@@ -243,6 +268,45 @@ export const HomePage = () => {
           watched={watched}
         />
       </div>
+
+      {isFilterModalOpen ? (
+        <div className="home-filter-backdrop" onClick={() => setIsFilterModalOpen(false)}>
+          <div className="home-filter-modal" onClick={(event) => event.stopPropagation()}>
+            <button
+              type="button"
+              className="home-filter-close"
+              onClick={() => setIsFilterModalOpen(false)}
+              aria-label="Close random picker filters"
+            >
+              ×
+            </button>
+            <h3>Random High-Rated Picks</h3>
+            <p>Select genres (optional), then generate recommendations.</p>
+
+            <div className="home-genre-tags">
+              {genres.map((genre) => (
+                <button
+                  key={genre.id}
+                  type="button"
+                  className={`genre-tag ${selectedGenres.includes(genre.id) ? "active" : ""}`}
+                  onClick={() => toggleGenre(genre.id)}
+                >
+                  {genre.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="home-filter-actions">
+              <button className="btn" type="button" onClick={() => setSelectedGenres([])}>
+                Clear genres
+              </button>
+              <button className="btn" type="button" onClick={generateRandomHighRated} disabled={isGenerating}>
+                {isGenerating ? "Generating..." : "Generate picks"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

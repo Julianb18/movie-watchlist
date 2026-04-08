@@ -224,16 +224,18 @@ export const HomePage = () => {
             <button className="btn" type="button" onClick={() => setIsFilterModalOpen(true)}>
               Can't Decide? Pick for me
             </button>
-            <button
-              className="home-refresh-btn"
-              type="button"
-              onClick={generateRandomHighRated}
-              disabled={isGenerating}
-              title="Generate a new list with current filters"
-              aria-label="Generate a new random list with current filters"
-            >
-              ↻
-            </button>
+            {randomHighRated.length > 0 ? (
+              <button
+                className="home-refresh-btn"
+                type="button"
+                onClick={generateRandomHighRated}
+                disabled={isGenerating}
+                title="Generate a new list with current filters"
+                aria-label="Generate a new random list with current filters"
+              >
+                ↻
+              </button>
+            ) : null}
           </div>
         </div>
 

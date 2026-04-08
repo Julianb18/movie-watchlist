@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/Header.css";
 
@@ -15,13 +15,19 @@ export const Header = ({ onOpenAuth }) => {
           </div>
           <ul className="nav-links">
             <li>
-              <Link to="/">Dashboard</Link>
+              <NavLink to="/" end className={({ isActive }) => (isActive ? "nav-active" : "")}>
+                Dashboard
+              </NavLink>
             </li>
             <li>
-              <Link to="/watchlist">Watch Next</Link>
+              <NavLink to="/watchlist" className={({ isActive }) => (isActive ? "nav-active" : "")}>
+                Watch Next
+              </NavLink>
             </li>
             <li>
-              <Link to="/watched">Seen</Link>
+              <NavLink to="/watched" className={({ isActive }) => (isActive ? "nav-active" : "")}>
+                Seen
+              </NavLink>
             </li>
             <li>
               {user ? (

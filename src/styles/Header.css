@@ -25,6 +25,12 @@ header a:hover {
   color: var(--accent);
 }
 
+.nav-active {
+  color: var(--accent);
+  font-weight: 700;
+  text-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+}
+
 header .brand a {
   font-weight: 700;
   font-size: 1.5rem;

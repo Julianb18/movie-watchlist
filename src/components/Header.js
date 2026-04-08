@@ -21,11 +21,6 @@ export const Header = () => {
               <Link to="/watched">Seen</Link>
             </li>
             <li>
-              <Link to="/add" className="btn">
-                + Add
-              </Link>
-            </li>
-            <li>
               {user ? (
                 <button className="btn" type="button" onClick={signOut}>
                   Sign Out

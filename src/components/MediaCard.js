@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { MediaDetailsModal } from "./MediaDetailsModal";
 import "../styles/MediaCard.css";
 
 const getMediaKey = (item) => `${item.media_type || "movie"}-${item.id}`;
@@ -21,9 +22,25 @@ export const MediaCard = ({
   const inWatched = watched.some((entry) => entry.media_key === mediaKey);
   const isTracked = inWatchlist || inWatched;
   const year = item.release_date ? item.release_date.substring(0, 4) : "-";
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+  const handleCardClick = () => setIsDetailsOpen(true);
+  const stopActionEvent = (event) => event.stopPropagation();
 
   return (
-    <article className={`media-card ${compact ? "compact" : ""} ${isTracked ? "tracked" : ""}`}>
+    <>
+    <article
+      className={`media-card ${compact ? "compact" : ""} ${isTracked ? "tracked" : ""}`}
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleCardClick();
+        }
+      }}
+    >
       {item.poster_path ? (
         <img src={`http://image.tmdb.org/t/p/w300${item.poster_path}`} alt={`${item.title} poster`} />
       ) : (
@@ -44,10 +61,24 @@ export const MediaCard = ({
               {isTracked ? (
                 <p className="media-card-state">{inWatched ? "In Seen" : "In Watch Next"}</p>
               ) : null}
-              <button className="btn" disabled={inWatchlist || inWatched} onClick={() => onAddWatchlist(item)}>
+              <button
+                className="btn"
+                disabled={inWatchlist || inWatched}
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onAddWatchlist(item);
+                }}
+              >
                 Watchlist
               </button>
-              <button className="btn" disabled={inWatched} onClick={() => onAddWatched(item)}>
+              <button
+                className="btn"
+                disabled={inWatched}
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onAddWatched(item);
+                }}
+              >
                 Watched
               </button>
             </>
@@ -55,10 +86,22 @@ export const MediaCard = ({
 
           {mode === "watchlist" ? (
             <>
-              <button className="btn" onClick={() => onMoveToWatched(item)}>
+              <button
+                className="btn"
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onMoveToWatched(item);
+                }}
+              >
                 Move to Watched
               </button>
-              <button className="btn btn-danger" onClick={() => onRemove(item.media_key)}>
+              <button
+                className="btn btn-danger"
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onRemove(item.media_key);
+                }}
+              >
                 Remove
               </button>
             </>
@@ -66,10 +109,22 @@ export const MediaCard = ({
 
           {mode === "watched" ? (
             <>
-              <button className="btn" onClick={() => onMoveToWatchlist(item)}>
+              <button
+                className="btn"
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onMoveToWatchlist(item);
+                }}
+              >
                 Move to Watchlist
               </button>
-              <button className="btn btn-danger" onClick={() => onRemove(item.media_key)}>
+              <button
+                className="btn btn-danger"
+                onClick={(event) => {
+                  stopActionEvent(event);
+                  onRemove(item.media_key);
+                }}
+              >
                 Remove
               </button>
             </>
@@ -77,5 +132,7 @@ export const MediaCard = ({
         </div>
       </div>
     </article>
+    <MediaDetailsModal item={item} isOpen={isDetailsOpen} onClose={() => setIsDetailsOpen(false)} />
+    </>
   );
 };

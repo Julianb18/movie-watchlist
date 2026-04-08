@@ -3,6 +3,9 @@ import { GlobalContext } from "../context/GlobalState";
 import { MediaCard } from "../components/MediaCard";
 import "../styles/HomePage.css";
 
+let dashboardDiscoverCache = null;
+let dashboardDiscoverInFlight = null;
+
 const normalizeMedia = (item) => ({
   ...item,
   media_type: item.media_type || "movie",
@@ -122,7 +125,15 @@ export const HomePage = () => {
       return;
     }
 
-    const load = async () => {
+    if (dashboardDiscoverCache) {
+      setTrending(dashboardDiscoverCache.trending);
+      setNewReleases(dashboardDiscoverCache.newReleases);
+      setGenres(dashboardDiscoverCache.genres);
+      setIsDiscoverLoading(false);
+      return;
+    }
+
+    const fetchDiscoverData = async () => {
       try {
         const [trendingResponse, movieReleaseResponse, tvReleaseResponse, genresResponse] = await Promise.all([
           fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${apiKey}`),
@@ -138,8 +149,6 @@ export const HomePage = () => {
           genresResponse.json(),
         ]);
 
-        if (!isMounted) return;
-
         const trendingItems = (trendingData.results || [])
           .filter((item) => item.media_type === "movie" || item.media_type === "tv")
           .map(normalizeMedia)
@@ -153,20 +162,36 @@ export const HomePage = () => {
           )
           .slice(0, 20);
 
-        setTrending(trendingItems);
-        setNewReleases(releaseItems);
-        setGenres((genresData.genres || []).slice(0, 12));
+        return {
+          trending: trendingItems,
+          newReleases: releaseItems,
+          genres: (genresData.genres || []).slice(0, 12),
+        };
       } catch (_error) {
-        if (isMounted) {
-          setTrending([]);
-          setNewReleases([]);
-          setGenres([]);
-        }
-      } finally {
-        if (isMounted) {
-          setIsDiscoverLoading(false);
-        }
+        return {
+          trending: [],
+          newReleases: [],
+          genres: [],
+        };
       }
+    };
+
+    const load = async () => {
+      if (!dashboardDiscoverInFlight) {
+        dashboardDiscoverInFlight = fetchDiscoverData().then((data) => {
+          dashboardDiscoverCache = data;
+          return data;
+        });
+      }
+
+      const data = await dashboardDiscoverInFlight;
+      dashboardDiscoverInFlight = null;
+
+      if (!isMounted) return;
+      setTrending(data.trending);
+      setNewReleases(data.newReleases);
+      setGenres(data.genres);
+      setIsDiscoverLoading(false);
     };
 
     load();

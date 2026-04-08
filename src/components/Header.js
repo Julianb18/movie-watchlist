@@ -29,18 +29,18 @@ export const Header = ({ onOpenAuth }) => {
                 Seen
               </NavLink>
             </li>
-            <li>
-              {user ? (
-                <button className="btn" type="button" onClick={signOut}>
-                  Sign Out
-                </button>
-              ) : (
-                <button className="btn" type="button" onClick={onOpenAuth}>
-                  Sign In
-                </button>
-              )}
-            </li>
           </ul>
+          <div className="header-auth">
+            {user ? (
+              <button className="btn" type="button" onClick={signOut}>
+                Sign Out
+              </button>
+            ) : (
+              <button className="btn" type="button" onClick={onOpenAuth}>
+                Sign In
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>

@@ -2,6 +2,22 @@
   padding-top: 12px;
 }
 
+.home-page .header {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 10px;
+}
+
+.home-page .header .heading {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
 .home-empty {
   color: var(--text-muted);
   margin-bottom: 20px;

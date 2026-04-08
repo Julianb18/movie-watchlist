@@ -8,6 +8,7 @@ header {
 }
 
 header .inner-content {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,6 +38,9 @@ header .brand a {
 }
 
 header .nav-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   padding: 0;
   margin: 0;
   list-style: none;
@@ -53,6 +57,10 @@ header .nav-links li:last-child {
   margin-right: 0;
 }
 
-header .nav-links button.btn {
+.header-auth {
+  justify-self: end;
+}
+
+.header-auth .btn {
   font-size: 0.875rem;
 }

@@ -79,8 +79,18 @@
 }
 
 .auth-mode-btn.active {
-  background: linear-gradient(135deg, var(--secondary), #7c3aed);
-  color: var(--white);
+  background: #d6b24a;
+  color: #161208;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.auth-modal-card .btn {
+  color: #161208;
+  text-shadow: none;
+}
+
+.auth-modal-card .btn:disabled {
+  color: rgba(22, 18, 8, 0.65);
 }
 
 .auth-form input {

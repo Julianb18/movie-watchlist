@@ -22,13 +22,13 @@ header a {
 }
 
 header a:hover {
-  color: var(--accent);
+  color: #c7a651;
 }
 
 .nav-active {
-  color: var(--accent);
+  color: var(--secondary);
   font-weight: 700;
-  text-shadow: 0 0 16px rgba(34, 211, 238, 0.35);
+  text-shadow: 0 0 16px rgba(216, 173, 47, 0.35);
 }
 
 header .brand a {

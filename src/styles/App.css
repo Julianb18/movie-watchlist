@@ -2,7 +2,7 @@
 
 :root {
   --primary: #0a1020;
-  --secondary: #8b5cf6;
+  --secondary: #d8ad2f;
   --accent: #22d3ee;
   --primary-bg: #060a14;
   --surface: rgba(10, 16, 32, 0.72);
@@ -20,10 +20,31 @@ body {
   color: var(--white);
   background-color: var(--primary-bg);
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(139, 92, 246, 0.22), transparent 45%),
-    radial-gradient(circle at 85% 0%, rgba(34, 211, 238, 0.2), transparent 35%),
+    radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(139, 92, 246, 0.16), transparent 35%),
     linear-gradient(165deg, #030712 0%, #0b132a 48%, #10162f 100%);
   background-attachment: fixed;
+}
+
+body.theme-dashboard {
+  background-image:
+    radial-gradient(circle at 18% 10%, rgba(216, 173, 47, 0.28), transparent 44%),
+    radial-gradient(circle at 88% 0%, rgba(245, 200, 84, 0.2), transparent 35%),
+    linear-gradient(165deg, #050607 0%, #1a1522 45%, #252012 100%);
+}
+
+body.theme-watchlist {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(139, 92, 246, 0.16), transparent 35%),
+    linear-gradient(165deg, #030712 0%, #0b132a 48%, #10162f 100%);
+}
+
+body.theme-watched {
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(127, 29, 29, 0.35), transparent 42%),
+    radial-gradient(circle at 88% 5%, rgba(190, 24, 93, 0.2), transparent 36%),
+    linear-gradient(165deg, #050407 0%, #1a0c12 50%, #0b0708 100%);
 }
 
 .container {
@@ -59,8 +80,8 @@ body {
 
 .btn {
   padding: 10px 15px;
-  background: linear-gradient(135deg, var(--secondary), #7c3aed);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--secondary), #f0cf66);
+  color: #1b1607;
   border-radius: 10px;
   text-transform: uppercase;
   font-weight: 700;
@@ -68,14 +89,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 1rem;
   letter-spacing: 0.02em;
-  box-shadow: 0 10px 25px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 2px 16px rgba(216, 173, 47, 0.35);
   transition: all 0.25s ease;
   line-height: 1.1;
 }
 
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 28px rgba(124, 58, 237, 0.45);
+  box-shadow: 0 6px 18px rgba(216, 173, 47, 0.45);
   cursor: pointer;
 }
 

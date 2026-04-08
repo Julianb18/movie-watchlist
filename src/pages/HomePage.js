@@ -106,6 +106,9 @@ export const HomePage = () => {
   const { addMovieToWatchlist, addMovieToWatched, watchlist, watched } = useContext(GlobalContext);
   const [trending, setTrending] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
+  const [randomHighRated, setRandomHighRated] = useState([]);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatorError, setGeneratorError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -160,14 +163,67 @@ export const HomePage = () => {
 
   const hasRows = useMemo(() => trending.length > 0 || newReleases.length > 0, [trending, newReleases]);
 
+  const generateRandomHighRated = async () => {
+    const apiKey = import.meta.env.VITE_TMDB_KEY;
+    if (!apiKey) {
+      setGeneratorError("TMDB API key is missing.");
+      return;
+    }
+
+    setIsGenerating(true);
+    setGeneratorError("");
+
+    try {
+      const randomPages = Array.from({ length: 3 }, () => Math.floor(Math.random() * 15) + 1);
+      const responses = await Promise.all(
+        randomPages.map((page) =>
+          fetch(
+            `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=${page}`
+          )
+        )
+      );
+      const payloads = await Promise.all(responses.map((response) => response.json()));
+
+      const allCandidates = payloads
+        .flatMap((payload) => payload.results || [])
+        .map((item) => normalizeMedia({ ...item, media_type: "movie" }))
+        .filter((item) => item.vote_average >= 7 && item.vote_count >= 500);
+
+      const unique = Array.from(new Map(allCandidates.map((item) => [item.id, item])).values());
+      const shuffled = unique.sort(() => Math.random() - 0.5);
+      setRandomHighRated(shuffled.slice(0, 12));
+    } catch (_error) {
+      setGeneratorError("Could not generate recommendations right now.");
+      setRandomHighRated([]);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div className="movie-page home-page">
       <div className="container">
         <div className="header">
           <h1 className="heading">Dashboard</h1>
+          <div className="home-actions">
+            <button className="btn" type="button" onClick={generateRandomHighRated} disabled={isGenerating}>
+              {isGenerating ? "Generating..." : "Can't Decide? Pick for me"}
+            </button>
+          </div>
         </div>
 
         {!hasRows ? <p className="home-empty">Add your TMDB key to load dashboard rails.</p> : null}
+        {generatorError ? <p className="home-error">{generatorError}</p> : null}
+        {randomHighRated.length > 0 ? (
+          <HomeRail
+            title="Highly Rated Random Picks"
+            items={randomHighRated}
+            onAddWatchlist={addMovieToWatchlist}
+            onAddWatched={addMovieToWatched}
+            watchlist={watchlist}
+            watched={watched}
+          />
+        ) : null}
 
         <HomeRail
           title="Trending Now"

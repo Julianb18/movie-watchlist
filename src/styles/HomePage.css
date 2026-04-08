@@ -7,6 +7,21 @@
   margin-bottom: 20px;
 }
 
+.home-actions {
+  display: flex;
+  align-items: center;
+}
+
+.home-actions .btn {
+  font-size: 0.82rem;
+  padding: 8px 12px;
+}
+
+.home-error {
+  margin: 0 0 16px;
+  color: #fca5a5;
+}
+
 .home-rail-section {
   margin-bottom: 28px;
 }

@@ -11,11 +11,13 @@ export const WatchedPage = () => {
   return (
     <div className="movie-page">
       <div className="container">
-        <div className="header">
+        <div className="list-page-header">
+          <div className="list-page-header-meta">
+            <span className="count-pill">
+              {watched.length} {watched.length === 1 ? "Title" : "Titles"}
+            </span>
+          </div>
           <h1 className="heading">Watched</h1>
-          <span className="count-pill">
-            {watched.length} {watched.length === 1 ? "Title" : "Titles"}
-          </span>
         </div>
 
         {watched.length > 0 ? (

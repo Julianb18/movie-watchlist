@@ -115,7 +115,22 @@ export const MediaDetailsModal = ({ item, isOpen, onClose }) => {
     <div className="media-details-backdrop" onClick={onClose}>
       <div className="media-details-modal" onClick={(event) => event.stopPropagation()}>
         <button className="media-details-close" type="button" onClick={onClose} aria-label="Close details">
-          ×
+          <svg
+            className="media-details-close-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.25"
+              strokeLinecap="round"
+              d="M6 6l12 12M18 6L6 18"
+            />
+          </svg>
         </button>
 
         {loading ? <p className="media-details-status">Loading details...</p> : null}

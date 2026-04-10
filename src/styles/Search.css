@@ -1,8 +1,15 @@
 .global-search {
   position: sticky;
-  top: 64px;
+  /* Sit just under the sticky header (matches Header.css --header-bar-height on small screens) */
+  top: 58px;
   z-index: 60;
   padding: 20px 0 8px;
+}
+
+@media (min-width: 769px) {
+  .global-search {
+    top: 64px;
+  }
 }
 
 .add-content {

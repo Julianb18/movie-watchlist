@@ -2,22 +2,34 @@
   padding: 30px 0;
 }
 
-.movie-page .header {
+.list-page-header {
+  margin-bottom: 26px;
+}
+
+.list-page-header-meta {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+}
+
+.list-page-header .heading {
+  color: var(--white);
+  margin: 0;
+  width: 100%;
+  text-align: center;
 }
 
 .count-pill {
-  display: block;
+  display: inline-block;
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(34, 211, 238, 0.3));
-  padding: 5px 15px;
-  font-size: 1.125rem;
+  padding: 4px 12px;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 999px;
   color: var(--white);
   border: 1px solid var(--surface-border);
+  white-space: nowrap;
 }
 
 .movie-page .heading {
@@ -61,7 +73,7 @@
 
 .media-compact-grid {
   display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(auto-fill, 190px);
-  justify-content: start;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, 160px);
+  justify-content: center;
 }

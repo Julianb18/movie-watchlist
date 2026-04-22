@@ -6,6 +6,7 @@
   box-shadow: 0 12px 28px rgba(2, 6, 23, 0.35);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .media-card.tracked {

@@ -49,31 +49,29 @@ header .brand a {
 header .header-nav {
   flex: 1;
   min-width: 0;
+  display: flex;
+  justify-content: center;
 }
 
 header .nav-links {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: static;
   padding: 0;
   margin: 0;
   list-style: none;
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 
 header .nav-links li {
-  display: inline-block;
-  margin-right: 30px;
-}
-
-header .nav-links li:last-child {
-  margin-right: 0;
+  display: block;
 }
 
 .header-auth {
   flex-shrink: 0;
   z-index: 2;
+  margin-left: auto;
 }
 
 .header-auth .btn {

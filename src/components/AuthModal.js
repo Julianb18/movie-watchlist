@@ -14,6 +14,13 @@ export const AuthModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  useEffect(() => {
+    if (user && isOpen) {
+      onClose();
+    }
+  }, [user, isOpen, onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -64,8 +71,26 @@ export const AuthModal = ({ isOpen, onClose }) => {
   };
 
   const handleGoogleSignIn = async () => {
-    const { error } = await signInWithGoogle();
-    if (error) setStatusMessage(error.message);
+    setStatusMessage("");
+    setIsGoogleLoading(true);
+
+    try {
+      const { data, error } = await signInWithGoogle();
+      if (error) {
+        setStatusMessage(error.message);
+        return;
+      }
+
+      if (!data?.url) {
+        setStatusMessage("Could not start Google sign-in. Check your Supabase Google provider settings.");
+      }
+    } catch (_error) {
+      setStatusMessage(
+        "Could not reach Supabase. Verify VITE_SUPABASE_URL in .env matches an active project in your Supabase dashboard."
+      );
+    } finally {
+      setIsGoogleLoading(false);
+    }
   };
 
   return (
@@ -151,8 +176,9 @@ export const AuthModal = ({ isOpen, onClose }) => {
                     className="btn"
                     type="button"
                     onClick={handleGoogleSignIn}
+                    disabled={isGoogleLoading}
                   >
-                    Continue with Google
+                    {isGoogleLoading ? "Redirecting..." : "Continue with Google"}
                   </button>
                 </div>
               </form>

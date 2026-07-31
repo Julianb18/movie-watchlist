@@ -90,7 +90,25 @@ Enable these in Supabase Authentication:
 - Email/password
 - Google OAuth
 
-Also configure URL settings:
+Also configure URL settings in **Authentication → URL Configuration**:
 
-- Site URL: `http://localhost:5173`
-- Redirect URL: `http://localhost:5173`
+- **Site URL:** your app origin (e.g. `http://localhost:5173` for local dev)
+- **Redirect URLs:** add every URL users can return to after sign-in:
+  - `http://localhost:5173`
+  - `http://localhost:5173/**`
+  - `https://your-app.vercel.app`
+  - `https://your-app.vercel.app/**`
+
+### Google OAuth setup
+
+1. In Supabase: **Authentication → Providers → Google** → enable and add Client ID + Client Secret from Google Cloud.
+2. In [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials** → your OAuth client:
+   - **Authorized redirect URI** (required):  
+     `https://YOUR-PROJECT-REF.supabase.co/auth/v1/callback`
+   - Do **not** put your app URL here — Google redirects to Supabase first, then Supabase sends the user back to your app.
+3. Copy **Project URL** and **publishable/anon key** from Supabase **Project Settings → API** into `.env`:
+   - `VITE_SUPABASE_URL=https://YOUR-PROJECT-REF.supabase.co`
+   - `VITE_SUPABASE_ANON_KEY=your_key`
+4. If deployed on Vercel, set the same env vars in the Vercel project settings and redeploy.
+
+If Google sign-in fails immediately, confirm the Supabase hostname resolves (open `https://YOUR-PROJECT-REF.supabase.co` in a browser). A deleted or mistyped project ref will break all auth, including Google.

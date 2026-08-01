@@ -8,6 +8,21 @@ export const Header = ({ onOpenAuth }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const displayEmail = user?.email ?? "";
+  const metadataName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.user_metadata?.preferred_username ||
+    "";
+  const displayName = metadataName || (displayEmail ? displayEmail.split("@")[0] : "Account");
+  const userInitials = displayName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location.pathname]);
@@ -79,9 +94,20 @@ export const Header = ({ onOpenAuth }) => {
           </nav>
           <div className="header-auth">
             {user ? (
-              <button className="btn" type="button" onClick={signOut}>
-                Sign Out
-              </button>
+              <div className="header-auth-user">
+                <button
+                  className="user-chip signout-chip"
+                  type="button"
+                  title={displayEmail || displayName}
+                  onClick={() => {
+                    closeMenu();
+                    signOut();
+                  }}
+                >
+                  <span className="user-initials">{userInitials || "U"}</span>
+                  <span className="signout-label">Sign Out</span>
+                </button>
+              </div>
             ) : (
               <button className="btn" type="button" onClick={onOpenAuth}>
                 Sign In
